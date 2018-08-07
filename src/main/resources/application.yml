@@ -1,0 +1,26 @@
+server:
+  port: 8080
+  context-path: /api
+
+zuul:
+  sensitiveHeaders:
+  routes:
+    reister-service:
+      path: /users
+      url: http://localhost:8081
+      strip-prefix: false
+    login-service:
+      path: /login
+      url: http://localhost:8081
+      strip-prefix: false
+    todo-service:
+      path: /todos
+      url: http://localhost:8082
+      strip-prefix: false
+
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          netflix: TRACE
