@@ -1,4 +1,4 @@
-package com.thoughtworks.traing.chensen.zuul.model;
+package com.thoughtworks.traing.chensen.zuul.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 //@Data
 //@AllArgsConstructor
 //@NoArgsConstructor
-//@Builder
+@Builder
 public class User {
     private int id;
 
@@ -22,6 +22,9 @@ public class User {
         this.id = id;
         this.userName = userName;
         this.password = password;
+    }
+
+    public User() {
     }
 
     public int getId() {
@@ -48,4 +51,5 @@ public class User {
         this.password = password;
     }
 }
+
 

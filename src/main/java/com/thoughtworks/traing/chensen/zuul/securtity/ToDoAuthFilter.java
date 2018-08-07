@@ -1,15 +1,14 @@
 package com.thoughtworks.traing.chensen.zuul.securtity;
 
 import com.google.common.collect.ImmutableList;
-import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.netflix.zuul.exception.ZuulException;
-import com.thoughtworks.traing.chensen.zuul.model.User;
+import com.thoughtworks.traing.chensen.zuul.client.UserClient;
+import com.thoughtworks.traing.chensen.zuul.dto.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -28,6 +27,10 @@ public class ToDoAuthFilter extends OncePerRequestFilter {
 
     private static final byte[] SECRET_KEY = "kitty".getBytes(Charset.defaultCharset());
 
+    @Autowired
+    private UserClient userClient;
+
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -35,8 +38,8 @@ public class ToDoAuthFilter extends OncePerRequestFilter {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (!StringUtils.isEmpty(token)) {
             try {
-//                User user = userClient.verifyToken(token);
-                User user = getUserFromToken(token);
+                User user = userClient.verifyToken(token);
+//                User user = getUserFromToken(token);
 
                 String internalToken = user.getId() + ":" + user.getUserName();
 
