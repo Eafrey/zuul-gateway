@@ -9,14 +9,15 @@ zuul:
       path: /users
       url: http://localhost:8081
       strip-prefix: false
-    login-service:
-      path: /login
-      url: http://localhost:8081
-      strip-prefix: false
+#    ignored-service:
+#      path: /login
+#      url: http://localhost:8081
+#      strip-prefix: false
     todo-service:
       path: /todos
       url: http://localhost:8082
       strip-prefix: false
+
 
 logging:
   level:

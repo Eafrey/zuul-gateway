@@ -6,6 +6,7 @@ import com.thoughtworks.traing.chensen.zuul.client.UserClient;
 import com.thoughtworks.traing.chensen.zuul.dto.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class ToDoAuthFilter extends OncePerRequestFilter {
@@ -36,15 +39,17 @@ public class ToDoAuthFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+
         if (!StringUtils.isEmpty(token)) {
             try {
-                User user = userClient.verifyToken(token);
-//                User user = getUserFromToken(token);
+                User user = getUserFromToken(token);
 
                 String internalToken = user.getId() + ":" + user.getUserName();
+                User user1 = userClient.verifyTokenInternal(internalToken);
+
 
                 RequestContext requestContext = RequestContext.getCurrentContext();
-                requestContext.addZuulRequestHeader("Authorization",internalToken);
+                requestContext.addZuulRequestHeader(HttpHeaders.AUTHORIZATION,internalToken);
 
                 SecurityContextHolder.getContext().setAuthentication(
                         new UsernamePasswordAuthenticationToken(internalToken, null,
@@ -70,6 +75,19 @@ public class ToDoAuthFilter extends OncePerRequestFilter {
         int id = (int) body.get("id");
         String name = (String) body.get("name");
         return new User(id, name, "*");
+    }
+
+
+    public static String generateToken(int id, String userName) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", id);
+        claims.put("name", userName);
+
+        String token = Jwts.builder()
+                .addClaims(claims)
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .compact();
+        return token;
     }
 
 
