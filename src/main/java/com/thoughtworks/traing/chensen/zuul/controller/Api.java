@@ -14,7 +14,7 @@ public class Api {
     @Autowired
     UserClient userClient;
 
-    @PostMapping("/login")
+    @PostMapping("/api/login")
     public String login(@RequestBody User user) {
         String id = userClient.login(user);
         try {

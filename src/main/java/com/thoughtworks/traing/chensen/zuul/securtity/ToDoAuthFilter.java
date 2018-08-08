@@ -45,11 +45,14 @@ public class ToDoAuthFilter extends OncePerRequestFilter {
                 User user = getUserFromToken(token);
 
                 String internalToken = user.getId() + ":" + user.getUserName();
-                User user1 = userClient.verifyTokenInternal(internalToken);
-
 
                 RequestContext requestContext = RequestContext.getCurrentContext();
                 requestContext.addZuulRequestHeader(HttpHeaders.AUTHORIZATION,internalToken);
+
+                User user1 = userClient.verifyTokenInternal(internalToken);
+
+
+
 
                 SecurityContextHolder.getContext().setAuthentication(
                         new UsernamePasswordAuthenticationToken(internalToken, null,
