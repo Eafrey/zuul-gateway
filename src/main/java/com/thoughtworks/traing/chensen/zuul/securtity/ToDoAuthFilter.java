@@ -7,6 +7,7 @@ import com.thoughtworks.traing.chensen.zuul.dto.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +26,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class ToDoAuthFilter extends OncePerRequestFilter {
 
@@ -38,6 +40,7 @@ public class ToDoAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        log.info("income request {}", request.getServletPath());
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (!StringUtils.isEmpty(token)) {
