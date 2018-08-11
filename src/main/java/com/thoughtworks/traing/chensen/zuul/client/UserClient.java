@@ -6,7 +6,7 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
 //url="http://localhost:8081",
-@FeignClient(name = "userservice", serviceId = "userservice")
+@FeignClient(name = "userservice", serviceId = "user-service")
 public interface UserClient {
     @PostMapping("/verification-internal")
     User verifyTokenInternal(String token);
