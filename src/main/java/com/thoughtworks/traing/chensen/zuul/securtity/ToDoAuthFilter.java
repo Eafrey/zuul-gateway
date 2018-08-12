@@ -43,8 +43,12 @@ public class ToDoAuthFilter extends OncePerRequestFilter {
         log.info("income request {}", request.getServletPath());
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 
+        log.info("income request 1");
+
+
         if (!StringUtils.isEmpty(token)) {
             try {
+
                 User user = getUserFromToken(token);
 
                 String internalToken = user.getId() + ":" + user.getUserName();
@@ -62,14 +66,22 @@ public class ToDoAuthFilter extends OncePerRequestFilter {
                                 ImmutableList.of(new SimpleGrantedAuthority("admin"),
                                         new SimpleGrantedAuthority("role")))
                 );
+                log.info("income request 6  ");
             } catch (Exception e) {
+                log.info("income request 7");
             } finally {
+                log.info("income request 11");
+
                 filterChain.doFilter(request, response);
             }
 
         } else {
+            log.info("income request 12");
+
             filterChain.doFilter(request, response);
         }
+        log.info("income request 15");
+
 
     }
 
