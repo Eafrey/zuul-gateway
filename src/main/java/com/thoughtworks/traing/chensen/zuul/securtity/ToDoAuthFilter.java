@@ -48,15 +48,20 @@ public class ToDoAuthFilter extends OncePerRequestFilter {
 
         if (!StringUtils.isEmpty(token)) {
             try {
+                log.info("income request 2  ");
 
                 User user = getUserFromToken(token);
+                log.info("income request 3  ");
 
                 String internalToken = user.getId() + ":" + user.getUserName();
+                log.info("income request 4  ");
 
                 RequestContext requestContext = RequestContext.getCurrentContext();
                 requestContext.addZuulRequestHeader(HttpHeaders.AUTHORIZATION,internalToken);
+                log.info("income request 5  ");
 
                 User user1 = userClient.verifyTokenInternal(internalToken);
+                log.info("income request 6  ");
 
 
 
@@ -66,9 +71,9 @@ public class ToDoAuthFilter extends OncePerRequestFilter {
                                 ImmutableList.of(new SimpleGrantedAuthority("admin"),
                                         new SimpleGrantedAuthority("role")))
                 );
-                log.info("income request 6  ");
+                log.info("income request 7  ");
             } catch (Exception e) {
-                log.info("income request 7");
+                log.info("income request 8");
             } finally {
                 log.info("income request 11");
 

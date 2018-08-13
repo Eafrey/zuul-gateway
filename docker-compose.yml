@@ -16,19 +16,70 @@ services:
         - mysql
     ports:
     - "3306:3306"
+  config-server:
+    image: chensen/config-server:${VER}
+    deploy:
+      replicas: 2
+      restart_policy:
+        delay: 10s
+    depends_on:
+    - mysql
+    networks:
+      todo:
+        aliases:
+        - config-server
+    ports:
+    - "8099:8099"
+    environment:
+    - SPRING_PROFILES_ACTIVE=default
   zuul_gateway:
-      image: chensen/zuul-gateway:${VER}
-      deploy:
-        replicas: 2
-        restart_policy:
-          delay: 10s
-      depends_on:
-      - mysql
-      networks:
-        todo:
-          aliases:
-          - zuul-gateway
-      ports:
-      - "8080:8080"
-      environment:
-      - SPRING_PROFILES_ACTIVE=default
+    image: chensen/zuul-gateway:${VER}
+    deploy:
+      replicas: 2
+      restart_policy:
+        delay: 10s
+    depends_on:
+    - mysql
+    networks:
+      todo:
+        aliases:
+        - zuul-gateway
+        - config-server
+    ports:
+    - "8080:8080"
+    environment:
+    - SPRING_PROFILES_ACTIVE=default
+  user-service:
+    image: chensen/user-service:${VER}
+    deploy:
+      replicas: 2
+      restart_policy:
+        delay: 10s
+    depends_on:
+    - mysql
+    - config-server
+    networks:
+      todo:
+        aliases:
+        - user-service
+    ports:
+    - "8081:8081"
+    environment:
+    - SPRING_PROFILES_ACTIVE=default
+  todo-service:
+    image: chensen/todo-service:${VER}
+    deploy:
+      replicas: 2
+      restart_policy:
+        delay: 10s
+    depends_on:
+    - mysql
+    - config-server
+    networks:
+      todo:
+        aliases:
+        - todo-service
+    ports:
+    - "8082:8082"
+    environment:
+    - SPRING_PROFILES_ACTIVE=default

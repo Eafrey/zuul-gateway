@@ -1,8 +1,8 @@
-spring:
-  config:
-    name: ${spring.application.name}
-    location: ../config-server/application.yml, ../config-server/application-default.yml, ../config-server/
-
-  cloud:
-    config:
-      enabled: true
+#spring:
+#  config:
+#    name: ${spring.application.name}
+#    location: ../config-server/application.yml, ../config-server/application-default.yml, ../config-server/
+#
+#  cloud:
+#    config:
+#      enabled: true
